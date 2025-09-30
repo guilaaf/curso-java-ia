@@ -1,0 +1,52 @@
+quarkus:
+  application:
+    name: curso-java-ia
+    version: 0.0.1-SNAPSHOT
+
+  http:
+    port: 8080
+
+  log:
+    level: INFO
+    category:
+      "org.treinamento.javaia": DEBUG
+
+  swagger-ui:
+    always-include: true
+    path: /swagger-ui
+
+  smallrye-health:
+    ui:
+      always-include: true
+
+  micrometer:
+    export:
+      prometheus:
+        enabled: true
+
+# Configurações personalizadas da aplicação
+ai:
+  enabled: true
+  default:
+    response: "Olá! Sou um assistente de IA integrado ao Quarkus com LangChain4j."
+
+# Configurações do LangChain4j (exemplo)
+langchain4j:
+  openai:
+    api-key: ${OPENAI_API_KEY:demo-key}
+    model: gpt-3.5-turbo
+    timeout: 30s
+
+# Profile de desenvolvimento
+"%dev":
+  quarkus:
+    log:
+      level: DEBUG
+
+# Profile de teste
+"%test":
+  quarkus:
+    log:
+      level: WARN
+  ai:
+    enabled: false

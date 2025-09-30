@@ -1,0 +1,43 @@
+version: '3.8'
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: src/main/docker/Dockerfile.jvm
+    ports:
+      - "8080:8080"
+    environment:
+      - QUARKUS_PROFILE=dev
+      - JAVA_OPTS_APPEND=-Dquarkus.log.level=DEBUG
+    volumes:
+      - ./logs:/deployments/logs
+    networks:
+      - quarkus-network
+
+  prometheus:
+    image: prom/prometheus:latest
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./monitoring/prometheus.yml:/etc/prometheus/prometheus.yml
+    networks:
+      - quarkus-network
+
+  grafana:
+    image: grafana/grafana:latest
+    ports:
+      - "3000:3000"
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+    volumes:
+      - grafana-storage:/var/lib/grafana
+    networks:
+      - quarkus-network
+####
+networks:
+  quarkus-network:
+    driver: bridge
+
+volumes:
+  grafana-storage:
