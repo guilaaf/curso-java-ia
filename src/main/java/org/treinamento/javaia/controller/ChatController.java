@@ -8,8 +8,8 @@ import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 
 @Path("/chat")
-@Produces(MediaType.APPLICATION_JSON)
-@Consumes(MediaType.APPLICATION_JSON)
+@Consumes(MediaType.TEXT_PLAIN)
+@Produces(MediaType.TEXT_PLAIN)
 public class ChatController {
 
     @Inject
@@ -19,26 +19,22 @@ public class ChatController {
     @GET
     public Response info() {
         return Response.ok()
-                .entity(new HealthResponse("Chat Service is running", "OK"))
+                .entity("O chat está no ar. Use o método POST para enviar mensagens.")
                 .build();
     }
 
     @POST
-    public Response chat(ChatRequest request) {
+    public Response chat(String prompt) {
         try {
-            String response = chatService.processMessage(request.message());
+            String response = chatService.chat(prompt);
             return Response.ok()
-                    .entity(new ChatResponse(response))
+                    .entity(response)
                     .build();
         } catch (Exception e) {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
-                    .entity(new ErrorResponse("Erro ao processar mensagem: " + e.getMessage()))
+                    .entity("Erro ao processar mensagem: " + e.getMessage())
                     .build();
         }
     }
 
-    public record ChatRequest(String message) {}
-    public record ChatResponse(String response) {}
-    public record HealthResponse(String message, String status) {}
-    public record ErrorResponse(String error) {}
 }

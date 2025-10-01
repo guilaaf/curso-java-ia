@@ -11,6 +11,14 @@ quarkus:
     category:
       "org.treinamento.javaia": DEBUG
 
+  langchain4j:
+    ollama:
+      base-url: http://localhost:11434
+      chat-model:
+        model-id: gpt-oss:20b
+      timeout: 60s
+
+
   swagger-ui:
     always-include: true
     path: /swagger-ui

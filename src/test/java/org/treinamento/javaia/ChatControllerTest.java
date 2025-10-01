@@ -16,8 +16,7 @@ public class ChatControllerTest {
                 .when().get("/chat")
                 .then()
                 .statusCode(200)
-                .body("status", is("OK"))
-                .body("message", containsString("Chat Service is running"));
+                .body(containsString("O chat está no ar"));
     }
 
     @Test
@@ -28,7 +27,7 @@ public class ChatControllerTest {
                 .when().post("/chat")
                 .then()
                 .statusCode(200)
-                .body("response", containsString("Você disse"));
+                .body(containsString("Você disse"));
     }
 
     @Test
